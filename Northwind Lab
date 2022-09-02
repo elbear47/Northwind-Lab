@@ -1,0 +1,74 @@
+-- Select all the rows from the "Customers" table. 
+SELECT c.*
+FROM [NORTHWND].[dbo].[Customers] c
+
+-- Get distinct countries from the Customers table.
+SELECT DISTINCT c.Country
+FROM [NORTHWND].[dbo].[Customers] c
+
+-- Get all the rows from the table Customers where the Customer’s ID starts with “BL”.
+SELECT c.*
+FROM [NORTHWND].[dbo].[Customers] c
+WHERE c.CustomerID LIKE 'BL%'
+
+-- Get the first 100 records of the orders table. 
+--DISCUSS: Why would you do this? in order to return a set number of records  
+--What else would you likely need to include in this query? an order by clause
+SELECT TOP 100
+    o.*
+FROM [NORTHWND].[dbo].[Orders] o
+ORDER BY o.RequiredDate DESC
+
+-- Get all customers that live in the postal codes 1010, 3012, 12209, and 05023.
+SELECT c.ContactName
+FROM [NORTHWND].[dbo].[Customers] c
+WHERE c.PostalCode IN ('1010', '3012', '12209', '05023')
+
+-- Get all orders where the ShipRegion is not equal to NULL.
+SELECT o.*
+FROM [NORTHWND].[dbo].[Orders] o
+WHERE o.ShipRegion IS NOT NULL
+
+-- Get all customers ordered by the country, then by the city.
+SELECT c.ContactName
+FROM [NORTHWND].[dbo].[Customers] c
+ORDER BY c.Country, c.City
+
+-- Add a new customer to the customers table. You can use whatever values.
+INSERT INTO [NORTHWND].[dbo].[Customers]
+VALUES('mycmm','my company', 'elber', 'mr', '123 main st', 'manassas', 'VA', '20110', 'USA', '702-396-7899', '702-396-7895')
+
+-- Update all ShipRegion to the value ‘EuroZone’ in the Orders table, where the ShipCountry is equal to France.  
+UPDATE [NORTHWND].[dbo].[Orders]
+SET ShipRegion = 'EuroZone'
+WHERE ShipCountry = 'France'
+
+-- Delete all orders from OrderDetails that have quantity of 1. 
+DELETE FROM [NORTHWND].[dbo].[Order Details]
+WHERE Quantity = 1
+
+-- Find the CustomerID that placed order 10290 (orders table).
+SELECT DISTINCT o.CustomerID
+FROM [NORTHWND].[dbo].[Orders] o
+WHERE o.OrderID = 10290
+
+-- Join the orders table to the customers table.
+SELECT  *
+FROM [NORTHWND].[dbo].[Orders] o
+JOIN [NORTHWND].[dbo].[Customers] c ON (o.CustomerID = c.CustomerID)
+
+-- Get employees’ firstname for all employees who report to no one.
+SELECT e.FirstName
+FROM [NORTHWND].[dbo].[Employees] e
+WHERE e.ReportsTo IS NULL
+
+-- Get employees’ firstname for all employees who report to Andrew.
+SELECT DISTINCT e.FirstName
+FROM [NORTHWND].[dbo].[Employees] e
+WHERE e.ReportsTo  = 
+(
+    SELECT e.EmployeeID
+    FROM [NORTHWND].[dbo].[Employees] e
+    WHERE e.ReportsTo IS NULL
+
+)
